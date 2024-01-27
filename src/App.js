@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Header from './Componants/Header';
+import Footer from './Componants/Footer';
+import CreateNote from './Componants/CreateNote';
+import Note from './Componants/Note';
+import './App.css';  // Import your main CSS file
 
-function App() {
+const App = () => {
+  const [additem, setAdditem] = useState([]);
+
+  const addNote = (note) => {
+    setAdditem((prevdata) => {
+      return [...prevdata, note];
+    });
+  };
+
+  const ondelete = (id) => {
+    setAdditem((olddata) => {
+      return olddata.filter((currdata, index) => {
+        return index !== id;
+      })
+    })
+
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <div className="app-container">
+        <CreateNote passnote={addNote} />
+
+        <div className="notes-container">
+          {additem.map((val, index) => (
+            <Note key={index}
+              id={index}
+              title={val.title}
+              content={val.content}
+              deleteitem={ondelete} />
+
+          ))}
+        </div>
+      </div>
+      <div className="footer">
+        <Footer />
+      </div>
+    </>
   );
-}
+};
 
 export default App;
